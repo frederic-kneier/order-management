@@ -1,0 +1,47 @@
+### Create Order
+
+POST http://localhost:8080/orders/{{$uuid}}
+Content-Type: application/json
+
+{
+  "items": [
+    {
+      "productId": "cf25b9d1-703d-4cfb-8ccd-9f4210306c2b",
+      "amount": 3
+    }
+  ]
+}
+
+> {% client.global.set("id", response.body.id) %}
+
+### Signal payment
+
+POST http://localhost:8080/orders/{{id}}/paymentResolution
+Content-Type: application/json
+
+{
+  "action": "pay"
+}
+
+### Begin fulfillment
+
+POST http://localhost:8080/orders/{{id}}/fulfillmentStart
+Content-Type: application/json
+
+{
+  "action": "start"
+}
+
+### Signal fulfillment
+
+POST http://localhost:8080/orders/{{id}}/fulfillmentResolution
+Content-Type: application/json
+
+{
+  "action": "resolve"
+}
+
+### Call mock fulfillment endpoint
+
+POST http://localhost:8080/mock/fulfillment
+Content-Type: application/json
